@@ -1,0 +1,18 @@
+.list {
+  border: 1px solid teal;
+  width: 200px;
+
+  img {
+    width: 100%;
+  }
+
+  li {
+    border: 1px dashed blue;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    border-radius: 8px;
+    margin: 8px;
+    grid-gap: 12px;
+    align-items: center;
+  }
+}

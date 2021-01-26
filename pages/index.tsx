@@ -1,4 +1,10 @@
 import Head from "next/head";
+import RiderList from "../components/RiderList";
+
+export type Rider = {
+  name: string;
+  fileName: string;
+};
 
 const RIDERS = [
   { name: "Anna Gasser", fileName: "AnnaGasser.jpg" },
@@ -26,15 +32,13 @@ const RIDERS = [
   { name: "Victor DeLaRue", fileName: "VictorDeLaRue.jpg" },
   { name: "Werni Stock", fileName: "WerniStock.jpg" },
 ];
-const Home = () => (
-  <div>
-    {RIDERS.map(({ name, fileName }) => (
-      <div key={fileName}>
-        <img src={`/riders/${fileName}`} alt={name} />
-        <p>{name}</p>
-      </div>
-    ))}
-  </div>
-);
+const Home = () => {
+  return (
+    <div>
+      <button>Randomize!</button>
+      <RiderList riders={RIDERS} />
+    </div>
+  );
+};
 
 export default Home;
