@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import RiderList from "../components/RiderList";
 
 export type Rider = {
@@ -19,7 +20,7 @@ const RIDERS = [
   { name: "Gigi Ruf", fileName: "GigiRuf.jpg" },
   { name: "Hailey Langland", fileName: "HaileyLangland.jpg" },
   { name: "Hana Beaman", fileName: "HanaBeaman.jpg" },
-  { name: "Jake Blauvelt", fileName: "JakeBlauvelt.jpg" },
+  // { name: "Jake Blauvelt", fileName: "JakeBlauvelt.jpg" },
   { name: "Jamie Anderson", fileName: "JamieAnderson.jpg" },
   { name: "Marion Haerty", fileName: "MarionHaerty.jpg" },
   { name: "Mark McMorris", fileName: "MarkMcMorris.jpg" },
@@ -32,11 +33,41 @@ const RIDERS = [
   { name: "Victor DeLaRue", fileName: "VictorDeLaRue.jpg" },
   { name: "Werni Stock", fileName: "WerniStock.jpg" },
 ];
+
 const Home = () => {
+  const [state, setState] = useState<{
+    selectedRiders: Rider[] | [];
+    unselectedRiders: Rider[] | [];
+  }>({
+    selectedRiders: [],
+    unselectedRiders: [...RIDERS],
+  });
+
+  // TODO: but where it selects two!
+
+  const randomlySelectRider = () => {
+    // get rider
+    const randomnIndex = Math.floor(
+      Math.random() * state.unselectedRiders.length
+    );
+    const randomRider = state.unselectedRiders[randomnIndex];
+
+    setState((state) => ({
+      ...state,
+      unselectedRiders: state.unselectedRiders.filter((r) => r !== randomRider),
+      selectedRiders: [randomRider, ...state.selectedRiders],
+    }));
+
+    console.log(state);
+  };
+
   return (
     <div>
-      <button>Randomize!</button>
-      <RiderList riders={RIDERS} title="Unselected" />
+      <button onClick={randomlySelectRider}>Randomize!</button>
+      <div style={{ display: "flex" }}>
+        <RiderList riders={state.unselectedRiders} title="Unselected" />
+        <RiderList riders={state.selectedRiders} title="Selected" />
+      </div>
     </div>
   );
 };

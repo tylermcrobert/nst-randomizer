@@ -10,12 +10,14 @@ const RiderList: React.FC<{ riders: Rider[]; title: string }> = ({
     <div>
       <h2>{title}</h2>
       <ul className={s.list}>
-        {riders.map(({ name, fileName }) => (
-          <li key={fileName}>
-            <img src={`/riders/${fileName}`} alt={name} />
-            <p>{name}</p>
-          </li>
-        ))}
+        {riders.length > 1
+          ? riders.map(({ name, fileName }) => (
+              <li key={fileName}>
+                <img src={`/riders/${fileName}`} alt={name} />
+                <p>{name}</p>
+              </li>
+            ))
+          : "none"}
       </ul>
     </div>
   );
