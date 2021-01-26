@@ -1,5 +1,7 @@
 .list {
   border: 1px solid teal;
+  border-radius: 12px;
+  display: inline-block;
   width: 200px;
 
   img {
@@ -14,5 +16,6 @@
     margin: 8px;
     grid-gap: 12px;
     align-items: center;
+    overflow: hidden;
   }
 }

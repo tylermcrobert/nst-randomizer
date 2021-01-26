@@ -36,7 +36,7 @@ const Home = () => {
   return (
     <div>
       <button>Randomize!</button>
-      <RiderList riders={RIDERS} />
+      <RiderList riders={RIDERS} title="Unselected" />
     </div>
   );
 };
