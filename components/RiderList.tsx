@@ -10,7 +10,7 @@ const RiderList: React.FC<{ riders: Rider[]; title: string }> = ({
     <div>
       <h2>{title}</h2>
       <ul className={s.list}>
-        {riders.length > 1
+        {riders.length
           ? riders.map(({ name, fileName }) => (
               <li key={fileName}>
                 <img src={`/riders/${fileName}`} alt={name} />

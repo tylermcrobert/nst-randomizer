@@ -55,7 +55,7 @@ const Home = () => {
     setState((state) => ({
       ...state,
       unselectedRiders: state.unselectedRiders.filter((r) => r !== randomRider),
-      selectedRiders: [randomRider, ...state.selectedRiders],
+      selectedRiders: [randomRider, ...state.selectedRiders].filter((r) => r),
     }));
 
     console.log(state);
