@@ -4,7 +4,7 @@ import s from "./Rider.module.scss";
 
 const Rider: React.FC<{ data: RiderAndPos }> = ({ data }) => {
   return (
-    <li className={s.riderOuter}>
+    <li className={`${s.riderOuter} js-rider`}>
       <img
         src={`/riders/${data.fileName}`}
         alt={data.name}
