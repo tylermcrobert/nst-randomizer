@@ -25,9 +25,15 @@ const Home = () => {
   const [state, setState] = useState<{
     selectedRiders: RiderAndPos[];
     unselectedRiders: RiderAndPos[];
+    currentSelectedRider: RiderAndPos | null;
+    ridersSelected: number;
+    ridersRemaining: number;
   }>({
     selectedRiders: [],
     unselectedRiders: [...ridersAndPositions],
+    currentSelectedRider: null,
+    ridersSelected: 0,
+    ridersRemaining: ridersAndPositions.length,
   });
 
   const shuffleCards = () => {
@@ -68,21 +74,35 @@ const Home = () => {
     );
     const randomRider = state.unselectedRiders[randomnIndex];
 
+    const selectedRiders = [randomRider, ...state.selectedRiders].filter(
+      (r) => r
+    );
+
+    const unselectedRiders = shuffle([
+      ...state.unselectedRiders.filter((r) => r !== randomRider),
+    ]);
+
+    const ridersSelected = selectedRiders.length;
+    const ridersRemaining = unselectedRiders.length;
+
     setState((state) => ({
       ...state,
-      unselectedRiders: shuffle([
-        ...state.unselectedRiders.filter((r) => r !== randomRider),
-      ]),
-      selectedRiders: [randomRider, ...state.selectedRiders].filter((r) => r),
+      unselectedRiders,
+      selectedRiders,
+      currentSelectedRider: randomRider,
+      ridersSelected,
+      ridersRemaining,
     }));
   };
 
-  let length = state.unselectedRiders.length;
-  const selectedRider = state.unselectedRiders[length - 1];
   return (
     <div>
-      <button onClick={randomlySelectRider}>Randomize! {length}</button>
-      <div className={`${s.title} js-title`}>{selectedRider.name}</div>
+      <button onClick={randomlySelectRider}>
+        Randomize! ({state.ridersSelected} of {state.ridersRemaining})
+      </button>
+      <div className={`${s.title}`}>
+        <div className="js-title">{state.currentSelectedRider?.name}</div>
+      </div>
       <div>
         <ul className={s.riderContainer}>
           {state.unselectedRiders.map((rider) => (
