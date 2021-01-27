@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./RiderList.module.scss";
-import { Rider } from "../pages/index";
+import { Rider } from "./App";
 
 const RiderList: React.FC<{ riders: Rider[]; title: string }> = ({
   riders,
