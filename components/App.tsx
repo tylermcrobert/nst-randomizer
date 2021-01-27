@@ -2,6 +2,7 @@ import { useState } from "react";
 import Rider from "./Rider";
 import RiderList from "./RiderList";
 import s from "./App.module.scss";
+import { shuffle } from "../util/shuffle";
 
 export type Rider = {
   name: string;
@@ -68,7 +69,9 @@ const Home = () => {
 
     setState((state) => ({
       ...state,
-      unselectedRiders: state.unselectedRiders.filter((r) => r !== randomRider),
+      unselectedRiders: shuffle([
+        ...state.unselectedRiders.filter((r) => r !== randomRider),
+      ]),
       selectedRiders: [randomRider, ...state.selectedRiders].filter((r) => r),
     }));
   };
