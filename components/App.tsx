@@ -93,9 +93,15 @@ const Home = () => {
       ...state.selectedRiders,
     ].filter((r) => r);
 
-    const unselectedRiders = shuffle([
+    const shuffledRiders = shuffle([
       ...state.unselectedRiders.filter((r) => r !== randomlySelectedRider),
     ]);
+
+    // todo: fix this
+    const unselectedRiders = Array.from({ length: 50 })
+      .map(() => shuffledRiders)
+      .reduce((acc, cur) => [...cur, ...acc], [])
+      .slice(0, 40);
 
     const ridersSelected = selectedRiders.length;
     const ridersRemaining = unselectedRiders.length;
@@ -127,7 +133,7 @@ const Home = () => {
           {ridersToShow.map((rider, i) => (
             <Rider
               data={rider}
-              key={rider.name}
+              key={`${rider.name}${i}`}
               index={i}
               ref={(el) => (itemRefs.current[i] = el)}
             />
