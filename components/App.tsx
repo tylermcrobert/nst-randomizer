@@ -41,8 +41,6 @@ const Home = () => {
   const tl = gsap.timeline();
 
   useEffect(() => {
-    console.log(itemRefs, "asdf;alskdf", state);
-
     tl.set([".js-rider", ".js-title"], { opacity: 0 });
     tl.set(itemRefs.current, {
       opacity: 1,
@@ -68,7 +66,7 @@ const Home = () => {
   }, [itemRefs.current, state]);
 
   useEffect(() => {
-    gsap.set([".js-rider", ".js-title"], { opacity: 0 });
+    gsap.set([itemRefs.current, ".js-title"], { opacity: 0 });
   }, []);
 
   const randomlySelectRider = () => {
@@ -76,14 +74,15 @@ const Home = () => {
     const randomnIndex = Math.floor(
       Math.random() * state.unselectedRiders.length
     );
-    const randomRider = state.unselectedRiders[randomnIndex];
+    const randomlySelectedRider = state.unselectedRiders[randomnIndex];
 
-    const selectedRiders = [randomRider, ...state.selectedRiders].filter(
-      (r) => r
-    );
+    const selectedRiders = [
+      randomlySelectedRider,
+      ...state.selectedRiders,
+    ].filter((r) => r);
 
     const unselectedRiders = shuffle([
-      ...state.unselectedRiders.filter((r) => r !== randomRider),
+      ...state.unselectedRiders.filter((r) => r !== randomlySelectedRider),
     ]);
 
     const ridersSelected = selectedRiders.length;
@@ -93,11 +92,15 @@ const Home = () => {
       ...state,
       unselectedRiders,
       selectedRiders,
-      currentSelectedRider: randomRider,
+      currentSelectedRider: randomlySelectedRider,
       ridersSelected,
       ridersRemaining,
     }));
   };
+
+  const ridersToShow = state.currentSelectedRider
+    ? [...state.unselectedRiders, state.currentSelectedRider]
+    : state.unselectedRiders;
 
   return (
     <div>
@@ -109,7 +112,7 @@ const Home = () => {
       </div>
       <div>
         <ul className={s.riderContainer}>
-          {state.unselectedRiders.map((rider, i) => (
+          {ridersToShow.map((rider, i) => (
             <Rider
               data={rider}
               key={rider.name}
