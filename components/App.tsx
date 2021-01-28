@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Rider from "./Rider";
 import RiderList from "./RiderList";
 import s from "./App.module.scss";
@@ -22,6 +22,8 @@ const ridersAndPositions: RiderAndPos[] = RIDERS.map((item, i) => ({
 }));
 
 const Home = () => {
+  const itemRefs = useRef<any[]>([]);
+
   const [state, setState] = useState<{
     selectedRiders: RiderAndPos[];
     unselectedRiders: RiderAndPos[];
@@ -36,20 +38,20 @@ const Home = () => {
     ridersRemaining: ridersAndPositions.length,
   });
 
-  const shuffleCards = () => {
-    const tl = gsap.timeline();
+  const tl = gsap.timeline();
+
+  useEffect(() => {
+    console.log(itemRefs, "asdf;alskdf", state);
 
     tl.set([".js-rider", ".js-title"], { opacity: 0 });
-    tl.set(".js-rider", {
+    tl.set(itemRefs.current, {
       opacity: 1,
       delay: 0.5,
       stagger: {
         each: 0.1,
-        ease: "power1.out",
+        ease: "power3.in",
       },
     });
-
-    // const remainingDur = 5 - tl.duration();
 
     tl.fromTo(
       [".js-title"],
@@ -63,11 +65,13 @@ const Home = () => {
         y: 0,
       }
     );
-  };
+  }, [itemRefs.current, state]);
+
+  useEffect(() => {
+    gsap.set([".js-rider", ".js-title"], { opacity: 0 });
+  }, []);
 
   const randomlySelectRider = () => {
-    shuffleCards();
-
     // get rider
     const randomnIndex = Math.floor(
       Math.random() * state.unselectedRiders.length
@@ -105,8 +109,13 @@ const Home = () => {
       </div>
       <div>
         <ul className={s.riderContainer}>
-          {state.unselectedRiders.map((rider) => (
-            <Rider data={rider} />
+          {state.unselectedRiders.map((rider, i) => (
+            <Rider
+              data={rider}
+              key={rider.name}
+              index={i}
+              ref={(el) => (itemRefs.current[i] = el)}
+            />
           ))}
         </ul>
       </div>
