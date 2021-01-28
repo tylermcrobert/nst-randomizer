@@ -53,7 +53,7 @@ const Home = () => {
     hideEverything();
     tl.set(itemRefs.current, {
       opacity: 1,
-      delay: 0.5,
+      delay: 1,
       stagger: {
         each: 0.1,
         ease: "power3.in",
