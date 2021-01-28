@@ -30,18 +30,27 @@ const Home = () => {
     currentSelectedRider: RiderAndPos | null;
     ridersSelected: number;
     ridersRemaining: number;
+    animating: boolean;
   }>({
     selectedRiders: [],
     unselectedRiders: [...ridersAndPositions],
     currentSelectedRider: null,
     ridersSelected: 0,
     ridersRemaining: ridersAndPositions.length,
+    animating: false,
   });
 
   const tl = gsap.timeline();
 
+  const hideEverything = () =>
+    gsap.set([itemRefs.current, ".js-title"], { opacity: 0 });
+
   useEffect(() => {
-    tl.set([".js-rider", ".js-title"], { opacity: 0 });
+    if (!state.currentSelectedRider || state.animating) return;
+
+    setState((state) => ({ ...state, animating: true }));
+
+    hideEverything();
     tl.set(itemRefs.current, {
       opacity: 1,
       delay: 0.5,
@@ -62,14 +71,17 @@ const Home = () => {
         delay: 0.5,
         y: 0,
       }
-    );
-  }, [itemRefs.current, state]);
+    ).then(() => {
+      setState((state) => ({ ...state, animating: false }));
+    });
+  }, [itemRefs.current, state.currentSelectedRider]);
 
   useEffect(() => {
-    gsap.set([itemRefs.current, ".js-title"], { opacity: 0 });
-  }, []);
+    hideEverything();
+  }, [itemRefs.current]);
 
   const randomlySelectRider = () => {
+    if (state.animating) return;
     // get rider
     const randomnIndex = Math.floor(
       Math.random() * state.unselectedRiders.length
