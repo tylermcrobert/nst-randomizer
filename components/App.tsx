@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Rider from "./Rider";
-import RiderList from "./RiderList";
+import Stats from "./Stats";
 import s from "./App.module.scss";
 import { shuffle } from "../util/shuffle";
 import { RIDERS } from "../constants";
@@ -21,23 +21,31 @@ const ridersAndPositions: RiderAndPos[] = RIDERS.map((item, i) => ({
   rotation: getRandumNum(),
 }));
 
+export type AppState = {
+  selectedRiders: RiderAndPos[];
+  unselectedRiders: RiderAndPos[];
+  currentSelectedRider: RiderAndPos | null;
+  ridersSelected: number;
+  ridersRemaining: number;
+  animating: boolean;
+  ridersToShuffle: RiderAndPos[];
+  ridersSelectedCount: number;
+  ridersRemainingCount: number;
+};
+
 const Home = () => {
   const itemRefs = useRef<any[]>([]);
 
-  const [state, setState] = useState<{
-    selectedRiders: RiderAndPos[];
-    unselectedRiders: RiderAndPos[];
-    currentSelectedRider: RiderAndPos | null;
-    ridersSelected: number;
-    ridersRemaining: number;
-    animating: boolean;
-  }>({
+  const [state, setState] = useState<AppState>({
     selectedRiders: [],
+    ridersToShuffle: [],
     unselectedRiders: [...ridersAndPositions],
     currentSelectedRider: null,
     ridersSelected: 0,
     ridersRemaining: ridersAndPositions.length,
     animating: false,
+    ridersSelectedCount: 0,
+    ridersRemainingCount: ridersAndPositions.length,
   });
 
   const tl = gsap.timeline();
@@ -45,6 +53,9 @@ const Home = () => {
   const hideEverything = () =>
     gsap.set([itemRefs.current, ".js-title"], { opacity: 0 });
 
+  /**
+   * Watch for rider changes and animate
+   */
   useEffect(() => {
     if (!state.currentSelectedRider || state.animating) return;
 
@@ -82,37 +93,61 @@ const Home = () => {
 
   const randomlySelectRider = () => {
     if (state.animating) return;
-    // get rider
+
+    /**
+     * Get a random rider
+     */
+
+    //  select random number between 0 and length
     const randomnIndex = Math.floor(
       Math.random() * state.unselectedRiders.length
     );
+
+    // Use it to get a random rider
     const randomlySelectedRider = state.unselectedRiders[randomnIndex];
 
+    /**
+     * Riders that have already been chosen
+     * In this function it is adding the
+     * one that is to be shown.
+     */
     const selectedRiders = [
       randomlySelectedRider,
       ...state.selectedRiders,
     ].filter((r) => r);
 
-    const shuffledRiders = shuffle([
+    /**
+     * Riders that have not been chosen.
+     *  this function it is removing the
+     * one that is to be shown.
+     */
+    const unselectedRiders = shuffle([
       ...state.unselectedRiders.filter((r) => r !== randomlySelectedRider),
     ]);
 
-    // todo: fix this
-    const unselectedRiders = Array.from({ length: 50 })
-      .map(() => shuffledRiders)
+    /**
+     * Riders to show in the Shuffle sequence
+     */
+    const ridersToShuffle = Array.from({ length: 50 })
+      .map(() => unselectedRiders)
       .reduce((acc, cur) => [...cur, ...acc], [])
       .slice(0, 40);
 
-    const ridersSelected = selectedRiders.length;
-    const ridersRemaining = unselectedRiders.length;
+    /**
+     * Utility counts
+     */
+
+    const ridersSelectedCount = selectedRiders.length;
+    const ridersRemainingCount = unselectedRiders.length;
 
     setState((state) => ({
       ...state,
-      unselectedRiders,
       selectedRiders,
+      unselectedRiders,
+      ridersToShuffle,
       currentSelectedRider: randomlySelectedRider,
-      ridersSelected,
-      ridersRemaining,
+      ridersSelectedCount,
+      ridersRemainingCount,
     }));
   };
 
@@ -122,6 +157,7 @@ const Home = () => {
 
   return (
     <div>
+      <Stats state={state} />
       <button onClick={randomlySelectRider}>
         Randomize! ({state.ridersSelected} of {state.ridersRemaining})
       </button>
