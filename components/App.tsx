@@ -156,14 +156,13 @@ const Home = () => {
     : state.unselectedRiders;
 
   return (
-    <div>
+    <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
       <Stats state={state} />
-      <button onClick={randomlySelectRider}>
-        Randomize! ({state.ridersSelected} of {state.ridersRemaining})
-      </button>
+
       <div className={`${s.title}`}>
         <div className="js-title">{state.currentSelectedRider?.name}</div>
       </div>
+
       <div>
         <ul className={s.riderContainer}>
           {ridersToShow.map((rider, i) => (
