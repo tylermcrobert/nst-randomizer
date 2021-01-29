@@ -15,7 +15,9 @@ const Stats: React.FC<{ state: AppState }> = ({ state }) => {
         />
         <Stat
           title="Current Rider"
-          val={state.currentSelectedRider?.name || "None"}
+          val={
+            state.animating ? "???" : state.currentSelectedRider?.name || "None"
+          }
         />
         <Stat title="Selected" val={state.ridersSelectedCount} />
         <Stat title="Total" val={RIDERS.length} />
