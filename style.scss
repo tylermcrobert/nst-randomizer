@@ -1,5 +1,14 @@
 @import "./normalize.scss";
 
+@font-face {
+  font-family: "Natural Selection";
+  src: url("/fonts/NaturalSelection.woff2") format("woff2"),
+    url("/fonts/NaturalSelection.woff") format("woff"),
+    url("/fonts/NaturalSelection.eot") format("eot");
+
+  font-style: normal;
+}
+
 ul {
   padding-left: 0;
 }
@@ -7,4 +16,5 @@ ul {
 body {
   background: #000;
   color: #fff;
+  font-family: "Natural Selection", Helvetica, sans-serif;
 }
