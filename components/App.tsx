@@ -35,6 +35,7 @@ export type AppState = {
 
 const Home = () => {
   const itemRefs = useRef<any[]>([]);
+  const [infoShown, setInfo] = useState(false);
 
   const [state, setState] = useState<AppState>({
     selectedRiders: [],
@@ -155,9 +156,23 @@ const Home = () => {
     ? [...state.unselectedRiders, state.currentSelectedRider]
     : state.unselectedRiders;
 
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "i") {
+        setInfo(!infoShown);
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [infoShown]);
+
   return (
     <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
-      <Stats state={state} />
+      {infoShown && <Stats state={state} />}
 
       <div className={`${s.title}`}>
         <div className="js-title">{state.currentSelectedRider?.name}</div>
