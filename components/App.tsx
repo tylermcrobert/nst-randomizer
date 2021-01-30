@@ -25,7 +25,6 @@ export type AppState = {
   selectedRiders: RiderAndPos[];
   unselectedRiders: RiderAndPos[];
   currentSelectedRider: RiderAndPos | null;
-  ridersSelected: number;
   ridersRemaining: number;
   animating: boolean;
   ridersToShuffle: RiderAndPos[];
@@ -42,7 +41,6 @@ const Home = () => {
     ridersToShuffle: [],
     unselectedRiders: [...ridersAndPositions],
     currentSelectedRider: null,
-    ridersSelected: 0,
     ridersRemaining: ridersAndPositions.length,
     animating: false,
     ridersSelectedCount: 0,
@@ -173,6 +171,10 @@ const Home = () => {
   return (
     <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
       {infoShown && <Stats state={state} />}
+
+      {state.ridersSelectedCount === 0 && (
+        <img src="/logo.svg" className={s.logo} />
+      )}
 
       <div className={`${s.title}`}>
         <div className="js-title">{state.currentSelectedRider?.name}</div>
