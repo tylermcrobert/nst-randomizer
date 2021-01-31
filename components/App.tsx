@@ -6,6 +6,8 @@ import { shuffle } from "../util/shuffle";
 import { RIDERS } from "../constants";
 import gsap from "gsap";
 
+const LENGTH = 40;
+
 export type Rider = {
   name: string;
   fileName: string;
@@ -130,7 +132,7 @@ const Home = () => {
     const ridersToShuffle = Array.from({ length: 50 })
       .map(() => unselectedRiders)
       .reduce((acc, cur) => [...cur, ...acc], [])
-      .slice(0, 40);
+      .slice(0, LENGTH + 1);
 
     /**
      * Utility counts
@@ -151,8 +153,8 @@ const Home = () => {
   };
 
   const ridersToShow = state.currentSelectedRider
-    ? [...state.unselectedRiders, state.currentSelectedRider]
-    : state.unselectedRiders;
+    ? [...state.ridersToShuffle, state.currentSelectedRider]
+    : state.ridersToShuffle;
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
