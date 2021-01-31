@@ -2,14 +2,16 @@ import React from "react";
 import { RiderAndPos } from "./App";
 import s from "./Rider.module.scss";
 
-type RiderType = { data: RiderAndPos; index: number };
+type RiderType = { data: RiderAndPos; index: number; forceShow?: boolean };
 
 const RiderWithRef = React.forwardRef<HTMLLIElement, RiderType>(
-  ({ data, index }, ref) => {
+  ({ data, index, forceShow = false }, ref) => {
+    console.log(forceShow);
+
     return (
       <li
         className={`${s.riderOuter} js-rider`}
-        style={{ zIndex: index }}
+        style={{ zIndex: index, opacity: forceShow ? 1 : "fart" }}
         ref={ref}
       >
         <img

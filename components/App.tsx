@@ -87,10 +87,6 @@ const Home = () => {
     });
   }, [itemRefs.current, state.currentSelectedRider]);
 
-  // useEffect(() => {
-  //   hideEverything();
-  // }, [itemRefs.current]);
-
   const randomlySelectRider = () => {
     if (state.animating) return;
 
@@ -159,6 +155,13 @@ const Home = () => {
   })();
 
   useEffect(() => {
+    // final rider
+    if (state.ridersRemainingCount === 0) {
+      gsap.set(".js-rider", { opacity: 1 });
+    }
+  }, [state.ridersRemainingCount]);
+
+  useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "i") {
         setInfo(!infoShown);
@@ -171,8 +174,7 @@ const Home = () => {
       window.removeEventListener("keydown", handleKey);
     };
   }, [infoShown]);
-
-  console.log(state);
+  console.log("remaining", state.ridersRemainingCount);
 
   return (
     <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
@@ -198,7 +200,7 @@ const Home = () => {
               />
             ))
           ) : (
-            <Rider data={ridersToShow[0]} index={0} />
+            <Rider data={ridersToShow[0]} index={0} forceShow />
           )}
         </ul>
       </div>
