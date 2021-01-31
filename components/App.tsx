@@ -52,7 +52,7 @@ const Home = () => {
   const tl = gsap.timeline();
 
   const hideEverything = () =>
-    gsap.set([itemRefs.current, ".js-title"], { opacity: 0 });
+    gsap.set([...itemRefs.current, ".js-title"], { opacity: 0 });
 
   /**
    * Watch for rider changes and animate
@@ -68,12 +68,12 @@ const Home = () => {
       delay: 0.2,
       stagger: {
         each: 0.1,
-        ease: "power3.in",
+        ease: "Power3.easeIn",
       },
     });
 
     tl.fromTo(
-      [".js-title"],
+      ".js-title",
       {
         opacity: 0,
         y: 24,
