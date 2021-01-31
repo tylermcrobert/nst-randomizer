@@ -3,10 +3,8 @@ import Rider from "./Rider";
 import Stats from "./Stats";
 import s from "./App.module.scss";
 import { shuffle } from "../util/shuffle";
-import { RIDERS } from "../constants";
+import { RIDERS, LENGTH } from "../constants";
 import gsap from "gsap";
-
-const LENGTH = 40;
 
 export type Rider = {
   name: string;
@@ -89,9 +87,9 @@ const Home = () => {
     });
   }, [itemRefs.current, state.currentSelectedRider]);
 
-  useEffect(() => {
-    hideEverything();
-  }, [itemRefs.current]);
+  // useEffect(() => {
+  //   hideEverything();
+  // }, [itemRefs.current]);
 
   const randomlySelectRider = () => {
     if (state.animating) return;

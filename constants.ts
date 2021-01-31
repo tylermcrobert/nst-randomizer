@@ -1,3 +1,5 @@
+export const LENGTH = 40;
+
 export const RIDERS = [
   { name: "Anna Gasser", fileName: "AnnaGasser.jpg" },
   { name: "Austen Sweetin", fileName: "AustenSweetin.jpg" },
