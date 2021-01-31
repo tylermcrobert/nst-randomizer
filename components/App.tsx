@@ -51,8 +51,9 @@ const Home = () => {
 
   const tl = gsap.timeline();
 
-  const hideEverything = () =>
+  const hideEverything = () => {
     gsap.set([...itemRefs.current, ".js-title"], { opacity: 0 });
+  };
 
   /**
    * Watch for rider changes and animate
@@ -130,9 +131,10 @@ const Home = () => {
      * Riders to show in the Shuffle sequence
      */
     const ridersToShuffle = Array.from({ length: 50 })
-      .map(() => unselectedRiders)
+      .map(() => [...unselectedRiders, randomlySelectedRider])
       .reduce((acc, cur) => [...cur, ...acc], [])
-      .slice(0, LENGTH + 1);
+      .slice(0, LENGTH)
+      .map((r) => ({ ...r, rotation: getRandumNum() }));
 
     /**
      * Utility counts
@@ -152,9 +154,11 @@ const Home = () => {
     }));
   };
 
-  const ridersToShow = state.currentSelectedRider
-    ? [...state.ridersToShuffle, state.currentSelectedRider]
-    : state.ridersToShuffle;
+  const ridersToShow: RiderAndPos[] = (() => {
+    return state.currentSelectedRider
+      ? [...state.ridersToShuffle, state.currentSelectedRider]
+      : state.ridersToShuffle;
+  })();
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -170,6 +174,8 @@ const Home = () => {
     };
   }, [infoShown]);
 
+  console.log(state);
+
   return (
     <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
       {infoShown && <Stats state={state} />}
@@ -184,14 +190,18 @@ const Home = () => {
 
       <div>
         <ul className={s.riderContainer}>
-          {ridersToShow.map((rider, i) => (
-            <Rider
-              data={rider}
-              key={`${rider.name}${i}`}
-              index={i}
-              ref={(el) => (itemRefs.current[i] = el)}
-            />
-          ))}
+          {state.ridersRemainingCount ? (
+            ridersToShow.map((rider, i) => (
+              <Rider
+                data={rider}
+                key={`${rider.name}${i}`}
+                index={i}
+                ref={(el) => el && (itemRefs.current[i] = el)}
+              />
+            ))
+          ) : (
+            <Rider data={ridersToShow[0]} index={0} />
+          )}
         </ul>
       </div>
     </div>
