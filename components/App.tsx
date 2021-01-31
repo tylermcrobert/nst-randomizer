@@ -36,7 +36,7 @@ const Home = () => {
   const itemRefs = useRef<any[]>([]);
   const [infoShown, setInfo] = useState(false);
 
-  const [state, setState] = useState<AppState>({
+  const initialState = {
     selectedRiders: [],
     ridersToShuffle: [],
     unselectedRiders: [...ridersAndPositions],
@@ -45,7 +45,8 @@ const Home = () => {
     animating: false,
     ridersSelectedCount: 0,
     ridersRemainingCount: ridersAndPositions.length,
-  });
+  };
+  const [state, setState] = useState<AppState>(initialState);
 
   const tl = gsap.timeline();
 
@@ -89,7 +90,9 @@ const Home = () => {
 
   const randomlySelectRider = () => {
     if (state.animating) return;
-
+    if (state.ridersRemainingCount === 0) {
+      setState(initialState);
+    }
     /**
      * Get a random rider
      */
@@ -174,10 +177,16 @@ const Home = () => {
       window.removeEventListener("keydown", handleKey);
     };
   }, [infoShown]);
-  console.log("remaining", state.ridersRemainingCount);
 
   return (
-    <div onClick={randomlySelectRider} style={{ cursor: "pointer" }}>
+    <div
+      onClick={() =>
+        state.ridersRemainingCount
+          ? randomlySelectRider()
+          : setState(initialState)
+      }
+      style={{ cursor: "pointer" }}
+    >
       {infoShown && <Stats state={state} />}
 
       {state.ridersSelectedCount === 0 && (

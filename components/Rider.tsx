@@ -6,8 +6,6 @@ type RiderType = { data: RiderAndPos; index: number; forceShow?: boolean };
 
 const RiderWithRef = React.forwardRef<HTMLLIElement, RiderType>(
   ({ data, index, forceShow = false }, ref) => {
-    console.log(forceShow);
-
     return (
       <li
         className={`${s.riderOuter} js-rider`}
