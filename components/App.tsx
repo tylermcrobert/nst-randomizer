@@ -194,7 +194,11 @@ const Home = () => {
       )}
 
       <div className={`${s.title}`}>
-        <div className="js-title">{state.currentSelectedRider?.name}</div>
+        <div className="js-title">
+          {state.currentSelectedRider?.name.split(" ").map((item) => (
+            <div key={item}>{item}</div>
+          ))}
+        </div>
       </div>
 
       <div>
